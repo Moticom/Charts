@@ -393,7 +393,7 @@ open class LineChartRenderer: LineRadarRenderer
                     e1 = dataSet.entryForIndex(x == 0 ? 0 : (x - 1))
                     e2 = dataSet.entryForIndex(x)
                     
-                    if e1 == nil || e2 == nil { continue }
+                    if e1 == nil || e2 == nil || e1.y.isNaN || e2.y.isNaN { continue }
                     
                     let pt = CGPoint(
                         x: CGFloat(e1.x),
@@ -636,10 +636,21 @@ open class LineChartRenderer: LineRadarRenderer
                 (dataSet.circleHoleColor == nil ||
                     dataSet.circleHoleColor == NSUIColor.clear)
             
-            for j in stride(from: _xBounds.min, through: _xBounds.range + _xBounds.min, by: 1)
+            let min = _xBounds.min
+            let max = _xBounds.range + _xBounds.min
+            let loopData: StrideThrough<Int> = stride(from: min, through: max, by: 1)
+            for j in loopData
             {
                 guard let e = dataSet.entryForIndex(j) else { break }
 
+                if dataSet.drawLastCircle {
+                    if j < max {
+                        let next = dataSet.entryForIndex(j + 1)
+                        if !next!.y.isNaN {
+                            continue
+                        }
+                    }
+                }
                 pt.x = CGFloat(e.x)
                 pt.y = CGFloat(e.y * phaseY)
                 pt = pt.applying(valueToPixelMatrix)
