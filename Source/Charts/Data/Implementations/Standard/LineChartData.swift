@@ -14,6 +14,9 @@ import Foundation
 /// Data object that encapsulates all data associated with a LineChart.
 open class LineChartData: ChartData
 {
+    /// Position to draw the arrow and "75 Days From Surgery"
+    public var surgeryPoint: CGPoint = .zero
+    
     public override init()
     {
         super.init()
