@@ -666,6 +666,7 @@ open class LineChartRenderer: LineRadarRenderer
                     continue
                 }
                 
+                lineData.surgeryPoint = pt
                 context.setFillColor(dataSet.getCircleColor(atIndex: j)!.cgColor)
                 
                 rect.origin.x = pt.x - circleRadius
